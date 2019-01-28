@@ -1,0 +1,23 @@
+{
+  "name": "planado",
+  "version": "1.0.0",
+  "description": "testwork",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lazarevand1997/planado.git"
+  },
+  "author": "andrey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lazarevand1997/planado/issues"
+  },
+  "homepage": "https://github.com/lazarevand1997/planado#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}

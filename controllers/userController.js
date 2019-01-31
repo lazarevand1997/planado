@@ -14,7 +14,7 @@ const pool = new Pool({
 });
 // webtoken
 const jwt = require('jsonwebtoken');
-var SECRET = 'planadosession';
+var {SECRET} = require("../config");
 var createToken = (details, secret) => {
   return jwt.sign({ userId: details.userId }, secret, {
     expiresIn: details.expire

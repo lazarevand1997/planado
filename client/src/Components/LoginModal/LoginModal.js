@@ -29,7 +29,7 @@ class LoginModal extends Component {
             password: this.state.log_password
           })
           .then(res => {
-            console.log(res);
+            console.log(res.data.status);
             if (res.data.access_token) {
                 localStorage.setItem("access_token", res.data.access_token);
                 this.setState({

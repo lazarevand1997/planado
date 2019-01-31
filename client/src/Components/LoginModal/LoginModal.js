@@ -9,7 +9,8 @@ class LoginModal extends Component {
       this.handlePasswordChange = this.handlePasswordChange.bind(this);
       this.state = {
         log_login: "",
-        log_password: ""
+        log_password: "",
+        user_name: ""
       };
     }
 
@@ -29,6 +30,12 @@ class LoginModal extends Component {
           })
           .then(res => {
             console.log(res);
+            if (res.data.access_token) {
+                localStorage.setItem("access_token", res.data.access_token);
+                this.setState({
+                  user_name: res.data.user_name
+                });
+              }
           })
           .catch(function(error) {
             console.log(error);

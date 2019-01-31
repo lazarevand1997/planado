@@ -1,31 +1,62 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, FormFeedback, FormText } from 'reactstrap';
+import { Form, FormGroup, Label, Input } from 'reactstrap';
+import axios from 'axios';
 
 class RegModal extends Component {
+    constructor(props) {
+      super(props);
+      this.handleLoginChange = this.handleLoginChange.bind(this);
+      this.handlePasswordChange = this.handlePasswordChange.bind(this);
+      this.state = {
+        reg_login: "",
+        reg_password: ""
+      };
+    }
+
+    handleLoginChange(e) {
+        this.setState({ reg_login: e.target.value });
+    };
+
+    handlePasswordChange(e) {
+        this.setState({ reg_password: e.target.value });
+    };
+
+    signUp() {
+        axios
+          .post("/api/signup", {
+            login: this.state.reg_login,
+            password: this.state.reg_password
+          })
+          .then(res => {
+            console.log(res);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+    };
+
 
   render() {
     return (
       <div>
           <Form>
-             <FormGroup>
-                <Label for="exampleEmail">Input without validation</Label>
-                <Input />
-                <FormFeedback>You will not be able to see this</FormFeedback>
-                <FormText>Example help text that remains unchanged.</FormText>
-              </FormGroup>
-              <FormGroup>
-                <Label for="exampleEmail">Valid input</Label>
-                <Input valid />
-                <FormFeedback valid>Sweet! that name is available</FormFeedback>
-                <FormText>Example help text that remains unchanged.</FormText>
-              </FormGroup>
-              <FormGroup>
-                <Label for="examplePassword">Invalid input</Label>
-                <Input invalid />
-                <FormFeedback>Oh noes! that name is already taken</FormFeedback>
-                <FormText>Example help text that remains unchanged.</FormText>
-              </FormGroup>
-            </Form>
+            <FormGroup>
+              <Label for="regLogin">Login</Label>
+              <Input onChange={this.handleLoginChange} autoFocus type="text" name="login" id="regLogin" placeholder="login" />
+            </FormGroup>
+            <FormGroup>
+              <Label for="regPassword">Password</Label>
+              <Input onChange={this.handlePasswordChange} type="password" name="password" id="regPassword" placeholder="password" />
+            </FormGroup>
+            <button
+              onClick={this.signUp.bind(this)}
+              className="btn btn-primary btn-block"
+              type="button"
+            >
+              {" "}
+               SignUp
+            </button>
+          </Form>
       </div>
     );
   }

@@ -1,27 +1,19 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import HomePage from "./Pages/HomePage";
 import './App.css';
 
 class App extends Component {
-    state = {
-        text: ''
-      }
-
-    fetchString = async () => {
-        const response = await fetch(`/api`);
-        const initial = await response.json()
-        const hitext = initial.text;
-        this.setState({ text: hitext });
-      }
-
-    componentDidMount() {
-      this.fetchString();
-    }
 
   render() {
     return (
       <div className="App">
-        Hello, this is my react front.<br/>
-        <code>{this.state.text}</code>
+          <BrowserRouter>
+              <Switch>
+                <Route exact path="/" component={HomePage} />
+                <Route path="/admin" component={HomePage} />
+              </Switch>
+          </BrowserRouter>
       </div>
     );
   }

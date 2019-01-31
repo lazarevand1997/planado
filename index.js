@@ -4,13 +4,14 @@ const api = require("./api");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const path = require('path');
+var {SECRET} = require("./config");
 
 app.use(bodyParser.json());
 //session use
 app.set("trust proxy", 1); // trust first proxy
 app.use(
   session({
-    secret: 'planadotest',
+    secret: SECRET,
     name: "sessionId",
     proxy: true,
     resave: true,

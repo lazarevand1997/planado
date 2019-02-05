@@ -29,7 +29,6 @@ class LoginModal extends Component {
             password: this.state.log_password
           })
           .then(res => {
-            console.log(res.data.status);
             if (res.data.access_token) {
                 localStorage.setItem("access_token", res.data.access_token);
                 this.setState({
@@ -42,29 +41,78 @@ class LoginModal extends Component {
           });
     };
 
-  render() {
-    return (
-        <div>
-            <Form>
-              <FormGroup>
-                <Label for="regLogin">Login</Label>
-                <Input onChange={this.handleLoginChange} autoFocus type="text" name="login" id="regLogin" placeholder="login" />
-              </FormGroup>
-              <FormGroup>
-                <Label for="regPassword">Password</Label>
-                <Input onChange={this.handlePasswordChange} type="password" name="password" id="regPassword" placeholder="password" />
-              </FormGroup>
-              <button
-                onClick={this.signIn.bind(this)}
-                className="btn btn-primary btn-block"
-                type="button"
-              >
-                {" "}
-                 SignIn
-              </button>
-            </Form>
-        </div>
+    componentDidMount() {
+    axios.defaults.headers.common.authorization = localStorage.getItem(
+      "access_token"
     );
+    axios
+      .get("/api/check")
+      .then(res => {
+        if (res.data.username) {
+          this.setState({
+            user_name: res.data.username
+          });
+        }
+      })
+      .catch(err => console.log(err));
+  }
+
+  render() {
+      let username = this.state.user_name;
+      if (username) {
+          return (
+              <div>
+                  <Form>
+                    <FormGroup>
+                      <Label for="regLogin">Login (you are logged as <b>{username}</b>)</Label>
+                      <Input onChange={this.handleLoginChange} autoFocus type="text" name="login" id="regLogin" placeholder="login" />
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="regPassword">Password</Label>
+                      <Input onChange={this.handlePasswordChange} type="password" name="password" id="regPassword" placeholder="password" />
+                    </FormGroup>
+                    <button
+                      onClick={this.signIn.bind(this)}
+                      className="btn btn-primary btn-block"
+                      type="button"
+                    >
+                      {" "}
+                       SignIn
+                    </button>
+                    <button
+                      className="btn btn-primary btn-block"
+                      type="button"
+                    >
+                      {" "}
+                       To personal page
+                    </button>
+                  </Form>
+              </div>
+          );
+      } else {
+        return (
+            <div>
+                <Form>
+                  <FormGroup>
+                    <Label for="regLogin">Login</Label>
+                    <Input onChange={this.handleLoginChange} autoFocus type="text" name="login" id="regLogin" placeholder="login" />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="regPassword">Password</Label>
+                    <Input onChange={this.handlePasswordChange} type="password" name="password" id="regPassword" placeholder="password" />
+                  </FormGroup>
+                  <button
+                    onClick={this.signIn.bind(this)}
+                    className="btn btn-primary btn-block"
+                    type="button"
+                  >
+                    {" "}
+                     SignIn
+                  </button>
+                </Form>
+            </div>
+        );
+    }
   }
 }
 

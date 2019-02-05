@@ -63,6 +63,10 @@ module.exports = {
      res.json({ text:'update' });
   },
 
+  check: (req, res) => {
+      return res.send({ username: req.session.name });
+  },
+
   login: (req, res) => {
       var login = req.body.login;
       var password = req.body.password;

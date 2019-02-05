@@ -13,6 +13,7 @@ import {
   DropdownItem, Modal, ModalHeader, ModalBody} from 'reactstrap';
 import LoginModal from "../LoginModal/LoginModal";
 import RegModal from "../RegModal/RegModal";
+import axios from 'axios';
 
 
 class TopNav extends Component {
@@ -26,7 +27,8 @@ class TopNav extends Component {
       this.state = {
         isOpen: false,
         modalLogin: false,
-        modalReg: false
+        modalReg: false,
+        username: null
       };
     }
     toggle() {
@@ -44,8 +46,38 @@ class TopNav extends Component {
         modalReg: !this.state.modalReg
       });
     }
+    logout() {
+        localStorage.removeItem("access_token");
+        this.setState({
+          username: null
+        });
+      }
+
+    componentDidMount() {
+    axios.defaults.headers.common.authorization = localStorage.getItem(
+      "access_token"
+    );
+    axios
+      .get("/api/check")
+      .then(res => {
+        if (res.data.username) {
+          this.setState({
+            username: res.data.username
+          });
+        }
+      })
+      .catch(err => console.log(err));
+  }
 
   render() {
+      let username = this.state.username;
+      let name;
+      if (username) {
+        name = username;
+      } else {
+        name = "Account";
+      }
+
     return (
         <div>
          <Navbar color="dark" dark expand="md">
@@ -58,7 +90,7 @@ class TopNav extends Component {
                </NavItem>
                <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
-                  Account
+                  {name}
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem onClick={this.toggleModalLogin}>
@@ -68,7 +100,7 @@ class TopNav extends Component {
                     Register
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem>
+                  <DropdownItem onClick={this.logout.bind(this)}>
                     Log out
                   </DropdownItem>
                 </DropdownMenu>

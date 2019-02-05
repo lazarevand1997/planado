@@ -1,5 +1,6 @@
 const express = require("express");
 const userController = require("./controllers/userController");
+const waterController = require("./controllers/waterController");
 const jwt =require("jsonwebtoken");
 var {SECRET} = require("./config");
 
@@ -46,6 +47,7 @@ router.use((req, res, next) => {
   }
 });
 router.post("/changepass", userController.changePassword);
+router.post("/createcounter", waterController.create);
 router.get("/check", userController.check);
 router.get("/read", userController.read);
 

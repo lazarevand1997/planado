@@ -12,21 +12,24 @@ import {
   DropdownMenu,
   DropdownItem, Modal, ModalHeader, ModalBody} from 'reactstrap';
 import LoginModal from "../LoginModal/LoginModal";
+import AddCounterModal from "../AddCounterModal/AddCounterModal";
 import axios from 'axios';
-import './TopNav.css';
+import './PersonalPageNav.css';
 
 
-class TopNav extends Component {
+class PersonalPageNav extends Component {
 
     constructor(props) {
       super(props);
 
       this.toggle = this.toggle.bind(this);
       this.toggleModalLogin = this.toggleModalLogin.bind(this);
+      this.toggleModalCounter = this.toggleModalCounter.bind(this);
       this.state = {
         isOpen: false,
         modalLogin: false,
-        username: null
+        username: null,
+        modalCounter:false
       };
     }
     toggle() {
@@ -37,6 +40,11 @@ class TopNav extends Component {
     toggleModalLogin() {
       this.setState({
         modalLogin: !this.state.modalLogin
+      });
+    }
+    toggleModalCounter() {
+      this.setState({
+        modalCounter: !this.state.modalCounter
       });
     }
     logout() {
@@ -74,13 +82,15 @@ class TopNav extends Component {
     return (
         <div>
          <Navbar color="dark" dark expand="md">
-           <NavbarBrand href="/">ColdWarmProject</NavbarBrand>
+           <NavbarBrand href="/">Personal Page</NavbarBrand>
            <NavbarToggler onClick={this.toggle} />
            <Collapse isOpen={this.state.isOpen} navbar>
              <Nav className="ml-auto" navbar>
-               <NavItem>
-                 <NavLink href="/">About</NavLink>
-               </NavItem>
+                <NavItem>
+                    <NavLink onClick={this.toggleModalCounter}>
+                        <span className="add_counter_link">Add counter readings</span>
+                     </NavLink>
+                </NavItem>
                <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
                   {name}
@@ -88,9 +98,6 @@ class TopNav extends Component {
                 <DropdownMenu right>
                   <DropdownItem onClick={this.toggleModalLogin}>
                     Login
-                  </DropdownItem>
-                  <DropdownItem>
-                    <a href="/lk" className="personalPage_navlink"> Personal Page</a>
                   </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem onClick={this.logout.bind(this)}>
@@ -107,9 +114,15 @@ class TopNav extends Component {
                <LoginModal/>
              </ModalBody>
            </Modal>
+           <Modal isOpen={this.state.modalCounter} toggle={this.toggleModalCounter} className={this.props.className}>
+               <ModalHeader toggle={this.toggleModalCounter}>Add counter readings</ModalHeader>
+               <ModalBody>
+                 <AddCounterModal/>
+               </ModalBody>
+             </Modal>
        </div>
     );
   }
 }
 
-export default TopNav;
+export default PersonalPageNav;

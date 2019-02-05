@@ -45,6 +45,7 @@ router.use((req, res, next) => {
     next();
   }
 });
+router.post("/changepass", userController.changePassword);
 router.get("/check", userController.check);
 router.get("/read", userController.read);
 

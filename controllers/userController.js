@@ -25,12 +25,35 @@ var createToken = (details, secret) => {
 module.exports = {
   create: (req, res) => {
       var login = req.body.login;
-      var password = req.body.password;
+      var firstname = req.body.firstname;
+      var lastname = req.body.lastname;
+      var address = req.body.address;
+      var password = firstname + lastname;
       bcrypt.hash(password, BCRYPT_SALT_ROUNDS)
        .then(function(hashedPassword) {
            console.log(hashedPassword);
-           pool.query('INSERT INTO users(user_name, password) values($1, $2)',
-           [login, hashedPassword], (err, response) => {
+           pool.query('INSERT INTO users(user_name, password, first_name, second_name, address) values($1, $2, $3, $4, $5)',
+           [login, hashedPassword, firstname, lastname, address], (err, response) => {
+               if (err) throw err;
+               return res.json(response);
+           });
+
+       })
+       .catch(function(error){
+           console.log("Error saving user: ");
+           console.log(error);
+           return res.send('error pass');
+       });
+  },
+
+  changePassword: (req, res) => {
+      var userid = req.session.userid;
+      var new_password  = req.body.new_password;
+      bcrypt.hash(new_password, BCRYPT_SALT_ROUNDS)
+       .then(function(hashedPassword) {
+           console.log(hashedPassword);
+           pool.query('UPDATE users SET password = $1, pass_changed = TRUE  WHERE id = $2',
+           [hashedPassword, userid], (err, response) => {
                if (err) throw err;
                return res.json(response);
            });
@@ -64,7 +87,7 @@ module.exports = {
   },
 
   check: (req, res) => {
-      return res.send({ username: req.session.name });
+      return res.send({ username: req.session.name, isadmin: req.session.isadmin });
   },
 
   login: (req, res) => {
@@ -77,17 +100,24 @@ module.exports = {
            var user_data = results.rows;
            var picked_user = user_data.find(o => o.user_name === login);
            if(bcrypt.compareSync(password, picked_user.password)){
-               var access_token = createToken({
-                   userId:picked_user.id,
-                   type: "access",
-                   expire: "365d"
-               },
-                SECRET);
-               req.session.access_token = access_token;
-               req.session.name = picked_user.user_name;
-               return res
-                .status(201)
-                .json({ status: "success", user_name: picked_user.user_name, access_token: access_token });
+                   var access_token = createToken({
+                       userId:picked_user.id,
+                       type: "access",
+                       expire: "365d"
+                   },
+                    SECRET);
+                   req.session.access_token = access_token;
+                   req.session.name = picked_user.user_name;
+                   req.session.isadmin = picked_user.is_admin;
+                   req.session.userid = picked_user.id;
+                   console.log(req.session);
+                   if(picked_user.pass_changed){
+                       return res
+                        .status(201)
+                        .json({ status: "success", user_name: picked_user.user_name, access_token: access_token, need_pass: false});
+                    } else {
+                        return res.json({ status: "success", user_name: picked_user.user_name, access_token: access_token, need_pass: true})
+                    }
            } else {
                res.send('error log');
                console.log('not ok');

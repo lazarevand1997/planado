@@ -37,7 +37,27 @@ module.exports = {
   },
 
   read: (req, res) => {
-      res.json('read');
+      var result = [];
+      var userid = req.session.userid;
+      pool.query('SELECT * FROM public.water_counter WHERE master = $1;',
+      [userid], (err, response) => {
+        if (err) throw err;
+        for (let row of response.rows) {
+          result.push(JSON.stringify(row));
+        }
+        return res.json(result);
+      });
+  },
+
+  readall: (req, res) => {
+      var result = [];
+      pool.query('SELECT * FROM public.water_counter;', (err, response) => {
+        if (err) throw err;
+        for (let row of response.rows) {
+          result.push(JSON.stringify(row));
+        }
+        return res.json(result);
+      });
   },
 
   delete: (req, res) => {

@@ -30,7 +30,6 @@ let checkToken = (req, secret) => {
           }
         }
       });
-      console.log(response);
       return response;
 };
 
@@ -48,6 +47,8 @@ router.use((req, res, next) => {
 });
 router.post("/changepass", userController.changePassword);
 router.post("/createcounter", waterController.create);
+router.get("/usercouner", waterController.read);
+router.get("/alluserscouner", waterController.readall);
 router.get("/check", userController.check);
 router.get("/read", userController.read);
 

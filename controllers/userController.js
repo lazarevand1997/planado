@@ -78,16 +78,60 @@ module.exports = {
 
   },
 
-  delete: (req, res) => {
-      res.json('delete');
-  },
-
-  update: (req, res) => {
-     res.json({ text:'update' });
-  },
-
   check: (req, res) => {
       return res.send({ username: req.session.name, isadmin: req.session.isadmin });
+  },
+
+  gettop: (req, res) => {
+           var watertype = req.body.watertype;
+           pool.query('SELECT distinct master FROM public.water_counter;', (error, results) => {
+               if (error) {
+                 throw error;
+               };
+               var users_data = results.rows;
+               pool.query('SELECT * FROM public.water_counter;', (error, resu) => {
+                   if (error) {
+                     throw error;
+                   };
+                   var water_data = resu.rows;
+                   var top_users = [];
+                   users_data.forEach(function(element){
+                       var new_total = {
+                           userid: element.master,
+                           count: 0
+                       };
+                       water_data.forEach(function(e){
+                           if(element.master === e.master){
+                               if(watertype === 'hot'){
+                                   new_total.count += e.hotwater;
+                               } else {
+                                   new_total.count += e.coldwater;
+                               }
+                           }
+                       });
+                       top_users.push(new_total);
+                   });
+                    pool.query('SELECT * FROM public.users;', (error, result) => {
+                        if (error) {
+                          throw error;
+                        };
+                        var usersinfo = result.rows;
+                        var tosend = [];
+                        top_users.forEach(function(el){
+                            usersinfo.forEach(function(ele){
+                                if(el.userid === ele.id){
+                                    var new_tosend_data = {
+                                        userinfo: ele,
+                                        watercount: el.count
+                                    }
+                                    tosend.push(new_tosend_data);
+                                }
+                            });
+                        });
+                        return res.send(tosend);
+                    });
+               });
+           });
   },
 
   login: (req, res) => {
@@ -110,7 +154,6 @@ module.exports = {
                    req.session.name = picked_user.user_name;
                    req.session.isadmin = picked_user.is_admin;
                    req.session.userid = picked_user.id;
-                   console.log(req.session);
                    if(picked_user.pass_changed){
                        return res
                         .status(201)

@@ -10,7 +10,9 @@ import {
   DropdownMenu,
   DropdownItem, Modal, ModalHeader, ModalBody} from 'reactstrap';
 import RegModal from "../RegModal/RegModal";
+import ModalTopUsers from "../ModalTopUsers/ModalTopUsers";
 import axios from 'axios';
+import $ from 'jquery';
 
 
 class TopNav extends Component {
@@ -20,10 +22,13 @@ class TopNav extends Component {
 
       this.toggle = this.toggle.bind(this);
       this.toggleModalReg = this.toggleModalReg.bind(this);
+      this.toggleTopModal = this.toggleTopModal.bind(this);
       this.state = {
         isOpen: false,
         username: null,
-        modalReg: false
+        modalReg: false,
+        topmodal: false,
+        topmodal_type: false
       };
     }
     toggle() {
@@ -34,6 +39,14 @@ class TopNav extends Component {
     toggleModalReg() {
       this.setState({
         modalReg: !this.state.modalReg
+      });
+    }
+    toggleTopModal(e) {
+      let element = $(e.currentTarget);
+      let type_modal = $(element).data('type');
+      this.setState({
+        topmodal_type: type_modal,
+        topmodal: !this.state.topmodal
       });
     }
     logout() {
@@ -77,6 +90,13 @@ class TopNav extends Component {
                     Register new user
                   </DropdownItem>
                   <DropdownItem divider />
+                  <DropdownItem data-type="cold" onClick={this.toggleTopModal}>
+                    Get cold top
+                  </DropdownItem>
+                  <DropdownItem data-type="hot" onClick={this.toggleTopModal}>
+                    Get hot top
+                  </DropdownItem>
+                  <DropdownItem divider />
                   <DropdownItem onClick={this.logout.bind(this)}>
                     Log out
                   </DropdownItem>
@@ -92,6 +112,13 @@ class TopNav extends Component {
                  <RegModal/>
                </ModalBody>
              </Modal>
+
+             <Modal isOpen={this.state.topmodal} toggle={this.toggleTopModal} className={this.props.className} size="lg">
+                 <ModalHeader toggle={this.toggleTopModal}>Top users</ModalHeader>
+                 <ModalBody>
+                   <ModalTopUsers type={this.state.topmodal_type}/>
+                 </ModalBody>
+               </Modal>
        </div>
     );
   }

@@ -52,5 +52,6 @@ router.get("/alluserscouner", waterController.readall);
 router.get("/check", userController.check);
 router.get("/read", userController.read);
 router.post("/adminread", waterController.adminread);
+router.post('/topusers', userController.gettop);
 
 module.exports = router;

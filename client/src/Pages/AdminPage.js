@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AdminNav from "../Components/AdminNav/AdminNav";
 import axios from 'axios';
 import LoginModal from '../Components/LoginModal/LoginModal';
+import AdminUsersList from '../Components/AdminUsersList/AdminUsersList';
 
 class AdminPage extends Component {
 
@@ -37,6 +38,7 @@ class AdminPage extends Component {
            return (
                <div>
                  <AdminNav/>
+                 <AdminUsersList/>
                </div>
            );
        } else {

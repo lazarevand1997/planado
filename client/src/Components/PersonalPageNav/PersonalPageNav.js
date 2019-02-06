@@ -52,6 +52,7 @@ class PersonalPageNav extends Component {
         this.setState({
           username: null
         });
+        window.location.href = "/";
       }
 
     componentDidMount() {

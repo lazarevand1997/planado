@@ -14,7 +14,8 @@ class AddCounterModal extends Component {
         year: "",
         month:"",
         cold: "",
-        hot: ""
+        hot: "",
+        nice_add:false
       };
     }
 
@@ -43,13 +44,25 @@ class AddCounterModal extends Component {
           hot: this.state.hot
       })
       .then(res => {
-        console.log(res);
+        if(res.data.status === "success"){
+            this.setState({ nice_add: true });
+        } else {
+            this.setState({ nice_add: false });
+        }
       })
       .catch(err => console.log(err));
   }
 
 
   render() {
+      let allok;
+      if(this.state.nice_add){
+          allok = <div className="alert alert-success mt-2" role="alert">
+                                Success!
+                        </div>
+      } else {
+          allok = "";
+      }
     return (
       <div>
         <Form>
@@ -83,6 +96,7 @@ class AddCounterModal extends Component {
                 {" "}
                  Send
               </button>
+              {allok}
         </Form>
       </div>
     );

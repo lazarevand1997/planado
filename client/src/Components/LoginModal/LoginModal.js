@@ -16,7 +16,8 @@ class LoginModal extends Component {
         user_name: "",
         new_pass: "",
         new_pass_create: false,
-        new_password_saved: false
+        new_password_saved: false,
+        wrong_log: false,
       };
     }
 
@@ -69,14 +70,22 @@ class LoginModal extends Component {
             if (res.data.access_token) {
                 localStorage.setItem("access_token", res.data.access_token);
                 this.setState({
-                  user_name: res.data.user_name
+                  user_name: res.data.user_name,
+                  wrong_log: false
                 });
                 if(res.data.need_pass){
                     this.setState({
                         new_pass_create: true
                     });
                 }
-              }
+                if(res.data.user_name === "admin"){
+                    window.location.href = "/admin";
+                }
+            } else {
+                this.setState({
+                  wrong_log: true
+                });
+            }
           })
           .catch(function(error) {
             console.log(error);
@@ -102,6 +111,14 @@ class LoginModal extends Component {
   render() {
 
       let username = this.state.user_name;
+      let wrongpass;
+      if(this.state.wrong_log){
+          wrongpass = <div className="alert alert-danger mt-2" role="alert">
+                                Wrong login or password!
+                        </div>
+        } else {
+            wrongpass = "";
+        };
       if(this.state.new_pass_create){
           let new_pass_ok = this.state.new_password_saved;
           let new_pass_ok_show = "";
@@ -183,6 +200,7 @@ class LoginModal extends Component {
                     {" "}
                      SignIn
                   </button>
+                  {wrongpass}
                 </Form>
 
 

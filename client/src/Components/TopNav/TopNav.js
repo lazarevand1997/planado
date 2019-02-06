@@ -74,12 +74,12 @@ class TopNav extends Component {
     return (
         <div>
          <Navbar color="dark" dark expand="md">
-           <NavbarBrand href="/">ColdWarmProject</NavbarBrand>
+           <NavbarBrand href="/">ColdHotProject</NavbarBrand>
            <NavbarToggler onClick={this.toggle} />
            <Collapse isOpen={this.state.isOpen} navbar>
              <Nav className="ml-auto" navbar>
                <NavItem>
-                 <NavLink href="/">About</NavLink>
+                 <NavLink href="/admin">Admin Page</NavLink>
                </NavItem>
                <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>

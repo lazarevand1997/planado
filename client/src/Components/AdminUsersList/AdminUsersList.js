@@ -44,7 +44,6 @@ class AdminUsersList extends Component {
           .then(res => {
             if (res) {
                 var dataCounter = res.data;
-                console.log(dataCounter);
                 this.setState({
                         data: dataCounter
                     });

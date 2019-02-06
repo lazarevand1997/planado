@@ -54,6 +54,7 @@ class TopNav extends Component {
         this.setState({
           username: null
         });
+        window.location.href = "/";
       }
 
     componentDidMount() {

@@ -13,7 +13,8 @@ class RegModal extends Component {
         reg_login: "",
         reg_firstname: "",
         reg_lastname: "",
-        reg_address: ""
+        reg_address: "",
+        sended: false
       };
     }
 
@@ -42,7 +43,11 @@ class RegModal extends Component {
             address: this.state.reg_address
           })
           .then(res => {
-            console.log(res);
+            if(res.data.command === "INSERT"){
+                this.setState({ sended: true});
+            } else {
+                this.setState({ sended: false });
+            }
           })
           .catch(function(error) {
             console.log(error);
@@ -51,6 +56,14 @@ class RegModal extends Component {
 
 
   render() {
+      let allok;
+      if(this.state.sended){
+          allok = <div className="alert alert-success mt-2" role="alert">
+                                Success!
+                        </div>
+      } else {
+          allok = "";
+      }
     return (
       <div>
           <Form>
@@ -78,6 +91,7 @@ class RegModal extends Component {
               {" "}
                Register
             </button>
+            {allok}
           </Form>
       </div>
     );

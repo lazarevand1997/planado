@@ -8,7 +8,8 @@ class BackImage extends Component {
       <div className="main_background_image">
         <div className="main_background_image__content">
             <div className="main_background_image__content_block">
-                Hello
+                <img className="main_valve" src={require("./valve_c.png")} alt="valve"/>
+                <p className="main_textabout">ColdHotProject</p>
             </div>
         </div>
       </div>

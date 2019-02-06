@@ -31,7 +31,6 @@ module.exports = {
       var password = firstname + lastname;
       bcrypt.hash(password, BCRYPT_SALT_ROUNDS)
        .then(function(hashedPassword) {
-           console.log(hashedPassword);
            pool.query('INSERT INTO users(user_name, password, first_name, second_name, address) values($1, $2, $3, $4, $5)',
            [login, hashedPassword, firstname, lastname, address], (err, response) => {
                if (err) throw err;
@@ -51,7 +50,6 @@ module.exports = {
       var new_password  = req.body.new_password;
       bcrypt.hash(new_password, BCRYPT_SALT_ROUNDS)
        .then(function(hashedPassword) {
-           console.log(hashedPassword);
            pool.query('UPDATE users SET password = $1, pass_changed = TRUE  WHERE id = $2',
            [hashedPassword, userid], (err, response) => {
                if (err) throw err;
@@ -143,7 +141,7 @@ module.exports = {
            };
            var user_data = results.rows;
            var picked_user = user_data.find(o => o.user_name === login);
-           if(bcrypt.compareSync(password, picked_user.password)){
+           if((picked_user) && bcrypt.compareSync(password, picked_user.password)){
                    var access_token = createToken({
                        userId:picked_user.id,
                        type: "access",
@@ -163,7 +161,7 @@ module.exports = {
                     }
            } else {
                res.send('error log');
-               console.log('not ok');
+               console.log('not ok pass');
            };
        });
   }

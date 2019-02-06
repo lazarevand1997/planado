@@ -11,7 +11,45 @@
 }
 
 .main_background_image__content_block{
-    padding-top: 20%;
+    padding-top: 10%;
     color:white;
     font-size: 3rem;
+}
+.main_valve{
+    transition: 0.3s;
+    width: 30%;
+    height: 30%;
+}
+.main_background_image__content_block:hover > .main_valve{
+    transition: 0.3s;
+    width: 20%;
+    height: 20%;
+    animation: 1s linear 0s normal none infinite running rot;
+    -webkit-animation: 1s linear 0s normal none infinite running rot;
+}
+.main_textabout{
+    opacity: 0;
+    transition: 0.3s;
+}
+.main_background_image__content_block:hover > .main_textabout{
+    opacity: 1;
+    transition: 0.6s;
+}
+
+
+@keyframes rot {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes rot {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

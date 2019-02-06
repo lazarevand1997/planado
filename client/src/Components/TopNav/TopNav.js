@@ -65,10 +65,15 @@ class TopNav extends Component {
   render() {
       let username = this.state.username;
       let name;
+      let personal;
       if (username) {
         name = username;
+        personal = <DropdownItem>
+                      <a href="/lk" className="personalPage_navlink"> Personal Page</a>
+                    </DropdownItem>
       } else {
         name = "Account";
+        personal = false;
       }
 
     return (
@@ -89,9 +94,7 @@ class TopNav extends Component {
                   <DropdownItem onClick={this.toggleModalLogin}>
                     Login
                   </DropdownItem>
-                  <DropdownItem>
-                    <a href="/lk" className="personalPage_navlink"> Personal Page</a>
-                  </DropdownItem>
+                 {personal}
                   <DropdownItem divider />
                   <DropdownItem onClick={this.logout.bind(this)}>
                     Log out

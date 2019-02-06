@@ -20,7 +20,7 @@ app.use(
 );
 
 //uncomment before deploy
-// app.use(express.static(path.join(__dirname, 'client/build')))
+app.use(express.static(path.join(__dirname, 'client/build')))
 
 app.get('/test',(req, res, next) => {
     res.json({ text:'hi' });
@@ -30,9 +30,9 @@ app.get('/test',(req, res, next) => {
 app.use("/api", api);
 
 //uncomment before deploy
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname + '/client/build/index.html'));
-// })
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
+})
 
 // start server
 const PORT = process.env.PORT || 5000;

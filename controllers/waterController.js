@@ -60,6 +60,19 @@ module.exports = {
       });
   },
 
+  adminread: (req, res) => {
+      var result = [];
+      var userid = req.body.id;
+      pool.query('SELECT * FROM public.water_counter WHERE master = $1;',
+      [userid], (err, response) => {
+        if (err) throw err;
+        for (let row of response.rows) {
+          result.push(JSON.stringify(row));
+        }
+        return res.json(result);
+      });
+  },
+
   delete: (req, res) => {
       res.json('delete');
   },

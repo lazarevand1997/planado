@@ -46,7 +46,7 @@ class ModalTopUsers extends Component {
                   <th>Water count</th>
                 </tr>
               {this.state.data.map(function(item, key) {
-                  if(key <= 3){
+                  if(key < 3){
                      return (
                         <tr key = {key}>
                             <td>{item.userinfo.id}</td>

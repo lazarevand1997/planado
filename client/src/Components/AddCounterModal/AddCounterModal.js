@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Col, Row, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Col, Row, Form, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import axios from 'axios';
+import $ from 'jquery';
 
 class AddCounterModal extends Component {
 
@@ -33,28 +34,38 @@ class AddCounterModal extends Component {
     };
 
     sendCounter() {
-    axios.defaults.headers.common.authorization = localStorage.getItem(
-      "access_token"
-    );
-    axios
-      .post("/api/createcounter", {
-          year: this.state.year,
-          month: this.state.month,
-          cold: this.state.cold,
-          hot: this.state.hot
-      })
-      .then(res => {
-        if(res.data.status === "success"){
-            this.setState({ nice_add: true });
-        } else {
-            this.setState({ nice_add: false });
-        }
-      })
-      .catch(err => console.log(err));
+        if((this.state.year !== '') && (this.state.month !== '')
+        && (this.state.cold !== '') && (this.state.hot !== '')){
+            axios.defaults.headers.common.authorization = localStorage.getItem(
+              "access_token"
+            );
+            axios
+              .post("/api/createcounter", {
+                  year: this.state.year,
+                  month: this.state.month,
+                  cold: this.state.cold,
+                  hot: this.state.hot
+              })
+              .then(res => {
+                if(res.data.status === "success"){
+                    this.setState({ nice_add: true });
+                } else {
+                    this.setState({ nice_add: false });
+                }
+              })
+              .catch(err => console.log(err));
+          } else {
+              var forms = document.getElementsByClassName('counter_form_valid');
+              Array.prototype.filter.call(forms, function(form) {
+                  form.classList.add('was-validated');
+              });
+          }
   }
 
 
   render() {
+      var dt = new Date();
+      var now_month = dt.getMonth() + 1;
       let allok;
       if(this.state.nice_add){
           allok = <div className="alert alert-success mt-2" role="alert">
@@ -65,28 +76,28 @@ class AddCounterModal extends Component {
       }
     return (
       <div>
-        <Form>
+        <Form className="counter_form_valid">
             <Row form>
                 <Col md={6}>
                     <FormGroup>
                        <Label for="counterYear">Year</Label>
-                       <Input onChange={this.handleYearChange} type="number" name="counterYear" id="counterYear" placeholder="year" />
+                       <Input onChange={this.handleYearChange} defaultValue={dt.getFullYear()} max={dt.getFullYear()} type="number" name="counterYear" id="counterYear" placeholder="year" required/>
                      </FormGroup>
                 </Col>
                 <Col md={6}>
                     <FormGroup>
                        <Label for="counterMonth">Month</Label>
-                       <Input onChange={this.handleMonthChange} type="number" name="counterMonth" id="counterMonth" placeholder="month" />
+                       <Input onChange={this.handleMonthChange} defaultValue={now_month} min="1" max="12" type="number" name="counterMonth" id="counterMonth" placeholder="month" required/>
                      </FormGroup>
                 </Col>
             </Row>
             <FormGroup>
                <Label for="counterCold">Cold water</Label>
-               <Input onChange={this.handleColdChange} type="text" name="counterCold" id="counterCold" placeholder="liters" />
+               <Input onChange={this.handleColdChange} type="number" name="counterCold" id="counterCold" placeholder="liters" required/>
              </FormGroup>
              <FormGroup>
                 <Label for="counterHot">Hot water</Label>
-                <Input onChange={this.handleHotChange} type="text" name="counterHot" id="counterHot" placeholder="liters" />
+                <Input onChange={this.handleHotChange} type="number" name="counterHot" id="counterHot" placeholder="liters" required/>
               </FormGroup>
               <button
                 onClick={this.sendCounter.bind(this)}

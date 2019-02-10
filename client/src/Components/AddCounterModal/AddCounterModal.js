@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Col, Row, Form, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
+import { Col, Row, Form, FormGroup, Label, Input } from 'reactstrap';
 import axios from 'axios';
-import $ from 'jquery';
-
 class AddCounterModal extends Component {
 
     constructor(props) {

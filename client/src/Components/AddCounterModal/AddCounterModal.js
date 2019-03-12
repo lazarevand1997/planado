@@ -9,9 +9,11 @@ class AddCounterModal extends Component {
       this.handleMonthChange = this.handleMonthChange.bind(this);
       this.handleColdChange = this.handleColdChange.bind(this);
       this.handleHotChange = this.handleHotChange.bind(this);
+      let dt = new Date();
+      let now_month = dt.getMonth() + 1;
       this.state = {
-        year: "",
-        month:"",
+        year: dt.getFullYear(),
+        month: now_month,
         cold: "",
         hot: "",
         nice_add:false
@@ -32,8 +34,8 @@ class AddCounterModal extends Component {
     };
 
     sendCounter() {
-        if((this.state.year !== '') && (this.state.month !== '')
-        && (this.state.cold !== '') && (this.state.hot !== '')){
+        if((this.state.year !== "") && (this.state.month !== "")
+        && (this.state.cold !== "") && (this.state.hot !== "")){
             axios.defaults.headers.common.authorization = localStorage.getItem(
               "access_token"
             );
